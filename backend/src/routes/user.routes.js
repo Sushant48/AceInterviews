@@ -16,7 +16,7 @@ const router = Router();
 
 
 router.route("/register").post(
-    upload.single("profilePic"),    
+    upload.single("profilePic"),   
     registerUser
 )
 router.route("/login").post(loginUser)

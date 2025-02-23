@@ -8,7 +8,7 @@ const resumeSchema = new Schema(
       required: true,
     },
     resumeFileUrl: {
-      type: String, // Cloudinary URL
+      type: String,
       required: true,
     },
     fileName: {
@@ -20,16 +20,9 @@ const resumeSchema = new Schema(
       required: true,
     },
     atsScore: {
-      type: Number, // ATS score out of 100
+      type: Number,
+      required: true,
       default: 0,
-    },
-    atsStatus: {
-      type: String,
-      enum: ["Pending", "Completed"],
-      default: "Pending",
-    },
-    keywordsMatched: {
-      type: [String], // Keywords matched during ATS analysis
     },
     uploadDate: {
       type: Date,
