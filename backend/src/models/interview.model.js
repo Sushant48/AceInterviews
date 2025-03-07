@@ -16,20 +16,8 @@ const interviewSchema = new Schema(
       {
         question: { type: String, required: true },
         userAnswer: { type: String },
-        score: { type: Number, default: 0 }
       },
     ],
-    interviewStatus: {
-      type: String,
-      enum: ["Not Started", "In Progress", "Completed"],
-      default: "Not Started",
-    },
-    startDate: {
-      type: Date,
-    },
-    endDate: {
-      type: Date,
-    },
     interviewFeedback: {
       overallScore: {
         type: Number,

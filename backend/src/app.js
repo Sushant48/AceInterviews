@@ -17,8 +17,10 @@ app.use(express.static("public"));
 
 import userRoutes from "./routes/user.routes.js";
 import resumeRoutes from "./routes/resume.routes.js";
+import interviewRoutes from "./routes/interview.routes.js";
 
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/resume", resumeRoutes);
+app.use("/api/v1/interview", interviewRoutes);
 
 export default app;
