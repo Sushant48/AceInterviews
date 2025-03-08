@@ -36,6 +36,11 @@ const interviewSchema = new Schema(
         default: "",
       },
     },
+    timeTaken: { type: Number }, // in minutes or seconds
+    accuracyScore: { type: Number, default: 0 }, // percentage
+    responseQuality: { type: Number, default: 0 }, // AI-based evaluation
+    status: { type: String, enum: ["in-progress", "completed", "reviewed"], default: "in-progress" },
+    sessionType: { type: String, enum: ["mock", "real-time"], default: "mock" }
   },
   {
     timestamps: true,

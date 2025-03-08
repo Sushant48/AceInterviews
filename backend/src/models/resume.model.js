@@ -28,6 +28,10 @@ const resumeSchema = new Schema(
       type: Date,
       default: Date.now,
     },
+    isPrimary: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

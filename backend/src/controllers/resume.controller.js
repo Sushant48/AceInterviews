@@ -130,9 +130,29 @@ const getResumeById = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, resume, "Resume fetched successfully"));
 });
 
+
+const setPrimaryResume = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { resumeId } = req.params;
+
+  const resume = await Resume.findOne({ _id: resumeId, user: userId });
+
+  if (!resume) {
+    throw new ApiError(404, "Resume not found");
+  }
+
+  await Resume.updateMany({ user: userId }, { $set: { isPrimary: false } });
+
+  resume.isPrimary = true;
+  await resume.save();
+
+  res.status(200).json(new ApiResponse(200, resume, "Primary resume set successfully"));
+});
+
 export {
   uploadResume,
   getUserResumes,
   deleteResume,
-  getResumeById
+  getResumeById,
+  setPrimaryResume
 };

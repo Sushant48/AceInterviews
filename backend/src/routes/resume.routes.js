@@ -4,6 +4,7 @@ import {
   getUserResumes,
   deleteResume,
   getResumeById,
+  setPrimaryResume
 } from "../controllers/resume.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -16,5 +17,6 @@ router
 router.route("/getUserResumes").get(verifyJWT, getUserResumes);
 router.get("/deleteResume/:resumeId" , verifyJWT, deleteResume);
 router.get("/getResumeById/:resumeId" , verifyJWT , getResumeById);
+router.get("/set-primary/:resumeId" , verifyJWT , setPrimaryResume);
 
 export default router;
