@@ -31,7 +31,7 @@ const Signup = () => {
             alert("Passwords do not match!");
             return;
         }
-        console.log(formData); // Will replace this with API call later
+        console.log(formData); 
     };
 
     return (
