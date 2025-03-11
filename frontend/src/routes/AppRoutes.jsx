@@ -15,11 +15,13 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+        
+        <Route path="/" element={<GlobalLayout />}>
+        
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        <Route path="/" element={<GlobalLayout />}>
-        {/* <Route element={<PrivateRoute />}> */}
+        <Route element={<PrivateRoute />}>
           <Route index element={<HomePage />} />
           <Route path="home" element={<HomePage />} />
           <Route path="dashboard" element={<Dashboard />} />
@@ -27,7 +29,8 @@ const AppRoutes = () => {
           <Route path="interviews" element={<Interviews />} />
           <Route path="performanceMetrics" element={<PerformanceMetrics />} />
           <Route path="realTimeInterview" element={<RealTimeInterview />} />
-          {/* </Route> */}
+          </Route>
+          
         </Route>
         
 

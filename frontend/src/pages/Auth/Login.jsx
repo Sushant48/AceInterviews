@@ -1,20 +1,37 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import useFormState from "@/hooks/useFormState";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "@/context/AuthContext";
+import BASE_URL from "@/config";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
+  const [formData, handleChange] = useFormState({
     email: "",
     password: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const navigate = useNavigate();
+  const {setUser} = useAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logging in with", formData);
+
+    try {
+      const response = await axios.post(`${BASE_URL}/users/login`, formData, { withCredentials: true },
+          {headers: { "Content-Type": "application/json" }},
+      );
+      console.log(response);
+      
+      setUser(response.data.data.user);
+      toast.success(response.data.message || "Login successful!");
+      navigate("/dashboard");
+  } catch (error) {
+    console.log(error.response?.data?.message);
+      const message = error.response?.data?.message || "An unexpected error occurred";
+      throw toast.error(message);
+  }
   };
 
   return (
@@ -52,7 +69,10 @@ const Login = () => {
           </button>
         </form>
         <p className="text-center text-[#4B4B4B] mt-4">
-          Don’t have an account? <Link to="/signup" className="text-[#491B6D]">Sign Up</Link>
+          Don’t have an account?{" "}
+          <a href="/signup" className="text-[#491B6D]">
+            Sign Up
+          </a>
         </p>
       </div>
     </div>

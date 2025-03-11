@@ -1,10 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { useAuth } from '../context/AuthContext';
 
 const PrivateRoute = () => {
-    const accessToken = Cookies.get('accessToken');
-
-    return accessToken ? <Outlet /> : <Navigate to="/login" />;
+    const { user } = useAuth();
+    return user ? <Outlet /> : <Navigate to="/login" replace={true} />
 };
 
 export default PrivateRoute;

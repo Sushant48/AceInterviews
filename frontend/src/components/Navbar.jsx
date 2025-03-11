@@ -1,12 +1,16 @@
 import { NavLink } from 'react-router-dom';
-import { User, LogOut } from 'lucide-react';
+import { User, LogOut, LogIn } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Resumes', path: '/resumes' },
     { name: 'Interviews', path: '/interviews' },
+    { name: 'Performance Metrics', path: '/performanceMetrics' },
   ];
 
   return (
@@ -26,8 +30,16 @@ const Navbar = () => {
         ))}
       </div>
       <div className="flex gap-4">
-        <User className="w-6 h-6 cursor-pointer" />
-        <LogOut className="w-6 h-6 cursor-pointer" />
+        {user ? (
+          <>
+            <User className="w-6 h-6 cursor-pointer" title={user.username} />
+            <LogOut className="w-6 h-6 cursor-pointer" onClick={logout} title="Logout" />
+          </>
+        ) : (
+          <NavLink to="/login">
+            <LogIn className="w-6 h-6 cursor-pointer" title="Login" />
+          </NavLink>
+        )}
       </div>
     </nav>
   );

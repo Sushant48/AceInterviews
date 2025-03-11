@@ -1,8 +1,11 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import useFormState from '@/hooks/useFormState';
+import { toast } from 'react-toastify';
+import BASE_URL from '@/config';
 
 const Signup = () => {
-    const [formData, setFormData] = useState({
+    const [formData, handleChange, handleFileChange] = useFormState({
         fullName: '',
         email: '',
         password: '',
@@ -10,28 +13,30 @@ const Signup = () => {
         profilePic: null
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+    const navigate = useNavigate();
 
-    const handleFileChange = (e) => {
-        setFormData({
-            ...formData,
-            profilePic: e.target.files[0]
-        });
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match!");
+            toast.error("Passwords do not match!");
             return;
         }
-        console.log(formData); 
+
+        const formDataToSend = new FormData();
+        formDataToSend.append('username', formData.fullName);
+        formDataToSend.append('email', formData.email);
+        formDataToSend.append('password', formData.password);
+        formDataToSend.append('profilePic', formData.profilePic);
+
+        try {
+            const response = await axios.post(`${BASE_URL}/users/register`, formDataToSend, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            toast.success(response.data.message || 'Signup successful!');
+            navigate('/login');
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Signup failed!');
+        }
     };
 
     return (
