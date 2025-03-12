@@ -10,6 +10,9 @@ import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
 import PerformanceMetrics from "../pages/PerformanceMetrics";
 import RealTimeInterview from "../pages/RealtimeInterview";
+import Profile from "@/pages/ProfilePage";
+import ProfilePicture from "@/pages/ProfilePicture";
+import ChangePassword from "@/pages/ChangePassword";
 
 const AppRoutes = () => {
   return (
@@ -23,8 +26,11 @@ const AppRoutes = () => {
 
         <Route element={<PrivateRoute />}>
           <Route index element={<HomePage />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="profile-picture" element={<ProfilePicture />} />
           <Route path="home" element={<HomePage />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="change-password" element={<ChangePassword />} />
           <Route path="resumes" element={<Resumes />} />
           <Route path="interviews" element={<Interviews />} />
           <Route path="performanceMetrics" element={<PerformanceMetrics />} />

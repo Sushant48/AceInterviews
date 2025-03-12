@@ -47,8 +47,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const updateProfilePicture = (profilePictureUrl) => {
+        setUser((prevUser) => ({ ...prevUser, profilePicture: profilePictureUrl }));
+      };
+
     return (
-        <AuthContext.Provider value={{ user,setUser, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, setUser, loading, login, logout, updateProfilePicture }}>
             {!loading && children}
         </AuthContext.Provider>
     );
