@@ -25,6 +25,7 @@ const startInterview = asyncHandler(async (req, res) => {
   const interview = await Interview.create({
     user: req.user._id,
     resume: resumeId,
+    title: jobTitle,
     questions: questions.map((q) => ({ question: q })),
   });
 
@@ -81,7 +82,7 @@ const completeInterview = asyncHandler(async (req, res) => {
 
 const getInterviewHistory = asyncHandler(async (req, res) => {
       const userId = req.user.id;
-      const { status, date, sort, resumeId } = req.query;
+      const {limit, status, date, sort, resumeId } = req.query;
   
       const filter = { user: userId };
       if (status) filter.status = status;
@@ -90,7 +91,7 @@ const getInterviewHistory = asyncHandler(async (req, res) => {
   
       const interviews = await Interview.find(filter)
         .populate('resume', 'fileName')
-        .sort(sort === 'desc' ? '-createdAt' : 'createdAt');
+        .sort(sort === 'desc' ? '-createdAt' : 'createdAt').limit(limit);
   
       res.status(200).json(new ApiResponse(200, interviews, "Interview history retrieved successfully"));
   });

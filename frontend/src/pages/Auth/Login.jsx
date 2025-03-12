@@ -22,15 +22,13 @@ const Login = () => {
       const response = await axios.post(`${BASE_URL}/users/login`, formData, { withCredentials: true },
           {headers: { "Content-Type": "application/json" }},
       );
-      console.log(response);
       
       setUser(response.data.data.user);
       toast.success(response.data.message || "Login successful!");
       navigate("/dashboard");
   } catch (error) {
-    console.log(error.response?.data?.message);
       const message = error.response?.data?.message || "An unexpected error occurred";
-      throw toast.error(message);
+      toast.error(message);
   }
   };
 

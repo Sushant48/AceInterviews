@@ -18,6 +18,9 @@ const interviewSchema = new Schema(
         userAnswer: { type: String },
       },
     ],
+    title: {
+      type: String,
+    },
     interviewFeedback: {
       overallScore: {
         type: Number,
