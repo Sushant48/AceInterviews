@@ -13,6 +13,7 @@ import RealTimeInterview from "../pages/RealtimeInterview";
 import Profile from "@/pages/ProfilePage";
 import ProfilePicture from "@/pages/ProfilePicture";
 import ChangePassword from "@/pages/ChangePassword";
+import InterviewDetails from "@/pages/InterviewDetails";
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route element={<PrivateRoute />}>
           <Route index element={<HomePage />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="interview/:id" element={<InterviewDetails />} />
           <Route path="profile-picture" element={<ProfilePicture />} />
           <Route path="home" element={<HomePage />} />
           <Route path="dashboard" element={<Dashboard />} />

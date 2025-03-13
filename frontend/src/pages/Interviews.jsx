@@ -1,27 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import BASE_URL from '@/config';
 
 const InterviewHistory = () => {
-  const [interviews, setInterviews] = useState([
-    {
-      _id: '1',
-      jobTitle: 'Frontend Developer',
-      date: '2025-02-28',
-      status: 'Completed',
-      feedback: 'Great performance, but improve on system design questions.'
-    },
-    {
-      _id: '2',
-      jobTitle: 'Full Stack Engineer',
-      date: '2025-03-05',
-      status: 'In Progress',
-      feedback: ''
-    }
-  ]);
+  const [interviews, setInterviews] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchInterviews = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/interview/history`, {
+          withCredentials: true,
+        });
+        setInterviews(response.data.data);
+      } catch (error) {
+        console.error('Failed to fetch interview history', error);
+      }
+    };
+
+    fetchInterviews();
+  }, []);
 
   const handleViewDetails = (interviewId) => {
-    console.log(`View details for interview ID: ${interviewId}`);
+    navigate(`/interview/${interviewId}`);
   };
 
   return (
@@ -37,13 +41,13 @@ const InterviewHistory = () => {
               <CardContent className="p-4">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="font-medium">{interview.jobTitle}</p>
-                    <p className="text-sm text-gray-500">{new Date(interview.date).toLocaleDateString()}</p>
-                    <p className={`text-sm ${interview.status === 'Completed' ? 'text-green-500' : 'text-yellow-500'}`}>
+                    <p className="font-medium">{interview.title}</p>
+                    <p className="text-sm text-gray-500">{new Date(interview.createdAt).toLocaleDateString()}</p>
+                    <p className={`text-sm ${interview.status === 'completed' ? 'text-green-500' : 'text-yellow-500'}`}>
                       {interview.status}
                     </p>
-                    {interview.feedback && (
-                      <p className="text-sm text-gray-700 mt-2">Feedback: {interview.feedback}</p>
+                    {interview.interviewFeedback && (
+                      <p className="text-sm text-gray-700 mt-2">Feedback: {interview.interviewFeedback.comments}</p>
                     )}
                   </div>
 
