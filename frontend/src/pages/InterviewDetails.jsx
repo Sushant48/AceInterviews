@@ -15,8 +15,6 @@ const InterviewDetails = () => {
         const response = await axios.get(`${BASE_URL}/interview/${id}`, {
           withCredentials: true,
         });
-        console.log("Interview response" , response);
-        
         setInterview(response.data.data);
       } catch (error) {
         console.error("Failed to fetch interview details", error);
