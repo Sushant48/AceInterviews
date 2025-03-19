@@ -7,9 +7,17 @@ const resumeSchema = new Schema(
       ref: "User",
       required: true,
     },
+    jobTitle: {
+      type: String,
+      required: true,
+    },
     resumeFileUrl: {
       type: String,
       required: true,
+    },
+    resumeTxt: {
+      type: String,
+      require: true,
     },
     fileName: {
       type: String,

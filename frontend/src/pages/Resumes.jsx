@@ -20,9 +20,9 @@ const ResumeManagement = () => {
       const response = await axios.get(`${BASE_URL}/resume/getUserResumes` , {
         withCredentials: true,
       });
-      console.log(response);
       
-      setResumes(response.data.data);
+      const data = response.data.data ? response.data.data : null;
+      setResumes(data);
     } catch (error) {
       console.error('Error fetching resumes:', error);
     }
@@ -47,6 +47,7 @@ const ResumeManagement = () => {
       setSelectedFile(null);
       setJobTitle('');
       fetchResumes();
+      toast.success('Resume uploaded successfully');
     } catch (error) {
       console.error('Error uploading resume:', error);
     }
@@ -66,8 +67,6 @@ const ResumeManagement = () => {
     try {
       const response = await axios.get(`${BASE_URL}/resume/set-primary/${resumeId}`, {
         withCredentials: true,});
-      console.log(response);
-      
       fetchResumes();
       toast.success(response.data.message);
     } catch (error) {

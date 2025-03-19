@@ -5,9 +5,9 @@ dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-export const generateInterviewFeedback = async (questions, resumeFileUrl) => {
+export const generateInterviewFeedback = async (questions, resumeTxt) => {
   try {
-    const prompt = `Analyze the following interview responses based on the resume provided here: ${resumeFileUrl}. 
+    const prompt = `Analyze the following interview responses based on the resume provided here: ${resumeTxt}. 
     Provide an objective assessment including an overall score (out of 100), strengths, weaknesses, and additional comments.
     
     Questions and answers:

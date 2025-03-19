@@ -4,18 +4,19 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Resume } from "../models/resume.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import extractResumeText from "../utils/extractResumeText.js"
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-const generateATSScore = async (resumeFileUrl, jobTitle) => {
-  if (!resumeFileUrl || !jobTitle) {
-      throw new ApiError(400, "Resume file URL and job title are required");
+const generateATSScore = async (resumeTxt, jobTitle) => {
+  if (!resumeTxt || !jobTitle) {
+      throw new ApiError(400, "Resume text file and job title are required");
   }
 
   const prompt = `You are an ATS (Applicant Tracking System) evaluator. Given a resume and a job title, evaluate the resume's compatibility for the job and provide an ATS score between 0 and 100.
 
   Job Title: ${jobTitle}
-  Resume URL: ${resumeFileUrl}
+  Resume (parsed from pdf to txt so first align it accordingly then evaluare): ${resumeTxt}
 
   Please respond in JSON format like this:
   {
@@ -54,6 +55,7 @@ const uploadResume = asyncHandler(async (req, res) => {
 
     const { originalname: fileName, mimetype: fileType, path: localPath } = req.file;
 
+    const resumeTxt = await extractResumeText(localPath,fileType);
     
     const uploadedFile = await uploadOnCloudinary(localPath);
 
@@ -61,14 +63,16 @@ const uploadResume = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Failed to upload resume to Cloudinary");
     }
 
-    const atsScore = await generateATSScore(uploadedFile.url , jobTitle);
+    const atsScore = await generateATSScore(resumeTxt , jobTitle);
 
     const resume = await Resume.create({
         user: req.user._id,
         resumeFileUrl: uploadedFile.url,
         fileName,
         fileType,
-        atsScore
+        atsScore,
+        jobTitle,
+        resumeTxt
     });
 
     return res.status(201).json(

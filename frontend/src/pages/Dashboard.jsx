@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "@/config";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({});
   const [recentInterviews, setRecentInterviews] = useState([]);
-
+  const [primaryResume, setPrimaryResume] = useState(null);
+  const navigate = useNavigate();
   const {user} = useAuth();
 
   useEffect(() => {
@@ -35,9 +37,33 @@ const Dashboard = () => {
       }
     };
 
+    const fetchPrimaryResume = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/resume/getUserResumes`, {
+          withCredentials: true,
+        });
+        const primary = response.data.data.find((resume) => resume.isPrimary);
+        setPrimaryResume(primary || null);
+      } catch (error) {
+        console.error("Failed to fetch primary resume", error);
+      }
+    };
+
     fetchStats();
     fetchRecentInterviews();
+    fetchPrimaryResume();
   }, []);
+
+  const handleMockInterview = () => {
+    if (!primaryResume) {
+      toast.error("Please set a primary resume before starting the interview.")
+      navigate("/resumes")
+      return;
+    }
+    navigate("/mock-interview", {
+      state: { resumeId: primaryResume._id, jobTitle: primaryResume.jobTitle },
+    });
+  };
 
   return (
     <div className="p-6">
@@ -54,12 +80,18 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <Link
-        to="/start-interview"
-        className="block mt-8 bg-[#491B6D] text-white text-center py-3 rounded-2xl text-xl shadow-md hover:bg-[#A26DB1]"
+      <button
+        onClick={handleMockInterview}
+        className="block mt-8 bg-[#491B6D] text-white text-center py-3 rounded-2xl text-xl shadow-md hover:bg-[#A26DB1] w-full"
       >
-        Start New Interview
-      </Link>
+        Start Mock Interview
+      </button>
+
+      <button
+        className="block mt-4 bg-[#491B6D] text-white text-center py-3 rounded-2xl text-xl shadow-md hover:bg-[#A26DB1] w-full"
+      >
+        Start Real-Time Interview
+      </button>
 
       <div className="mt-10">
         <h2 className="text-2xl font-bold">Recent Interviews</h2>

@@ -2,16 +2,12 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-export const generateInterviewQuestions = async (resumeFileUrl, jobTitle) => {
+export const generateInterviewQuestions = async (resumeTxt, jobTitle) => {
+  
   try {
-    const prompt = `You are an expert technical interviewer. Given the resume provided at this URL: ${resumeFileUrl}, generate a clear, well-structured list of interview questions tailored specifically for the job title: ${jobTitle}. 
+    const prompt = `You are an expert technical interviewer. Given the resume: ${resumeTxt}, generate a clear, well-structured list of 10 interview questions from the given resume and tailored for the job title: ${jobTitle}. 
 
-Please categorize the questions into two sections:
-
-1. 5 Technical Questions (related to skills, technologies, and projects mentioned in the resume)
-2. 5 Behavioral Questions (based on work experience, teamwork, problem-solving, and ownership)
-
-Please respond in single JSON format like this(don't mention category names):
+Please respond in single JSON format like this:
   {
     "question" : ["question1 text",
                   "question2 text",
@@ -33,8 +29,6 @@ Please respond in single JSON format like this(don't mention category names):
 
     const jsonMatch = text.match(/\{.*\}/s);
     const parsedResponse = jsonMatch ? JSON.parse(jsonMatch) : null;
-    console.log(parsedResponse);
-    
     
     const questions = parsedResponse.question;
 

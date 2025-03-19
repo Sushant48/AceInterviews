@@ -6,7 +6,6 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
-
 const startInterview = asyncHandler(async (req, res) => {
   const { resumeId, jobTitle } = req.body;
 
@@ -20,7 +19,7 @@ const startInterview = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Resume not found");
   }
 
-  const questions = await generateInterviewQuestions(resume.resumeFileUrl, jobTitle);
+  const questions = await generateInterviewQuestions(resume.resumeTxt, jobTitle);
 
   const interview = await Interview.create({
     user: req.user._id,
@@ -70,7 +69,7 @@ const completeInterview = asyncHandler(async (req, res) => {
       throw new ApiError(404, "Interview not found");
     }
   
-    const feedback = await generateInterviewFeedback(interview.questions, interview.resume.resumeFileUrl);
+    const feedback = await generateInterviewFeedback(interview.questions, interview.resume.resumeTxt);
   
     interview.interviewFeedback = feedback;
     interview.status = "completed";
