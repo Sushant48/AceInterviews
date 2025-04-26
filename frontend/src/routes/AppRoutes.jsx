@@ -9,7 +9,7 @@ import Interviews from "../pages/Interviews";
 import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
 import PerformanceMetrics from "../pages/PerformanceMetrics";
-import RealTimeInterview from "../pages/RealtimeInterview";
+import RealTimeInterview from "../pages/RealTimeInterview";
 import Profile from "@/pages/ProfilePage";
 import ProfilePicture from "@/pages/ProfilePicture";
 import ChangePassword from "@/pages/ChangePassword";
