@@ -73,11 +73,6 @@ const loginUser = asyncHandler(async (req, res) =>{
 
     const {email, password} = req.body
     
-    
-
-    console.log("email",email);
-    console.log("email",password);
-    
 
     if (email.trim() === "" || password.trim() === "") {
         throw new ApiError(400, "email or password is required")

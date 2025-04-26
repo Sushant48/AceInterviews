@@ -12,8 +12,7 @@ export const AuthProvider = ({ children }) => {
         const fetchUser = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/users/current-user`, { withCredentials: true });
-                console.log(response);
-                
+                                
                 setUser(response.data.data);
             } catch (error) {
                 setUser(null);
@@ -30,7 +29,6 @@ export const AuthProvider = ({ children }) => {
             const response = await axios.post(`${BASE_URL}/users/login`, formData, { withCredentials: true },
                 {headers: { "Content-Type": "application/json" }},
             );
-            console.log(response);
             
             setUser(response.data.data.user);
             toast.success(response.data.message || "Login successful!");

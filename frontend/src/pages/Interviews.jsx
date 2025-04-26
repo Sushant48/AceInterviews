@@ -24,8 +24,6 @@ const InterviewHistory = () => {
           withCredentials: true,
         });
         
-        console.log(response);
-        
         setInterviews(response.data.data.data);
         setTotalInterviews(response.data.data.pagination.total);
         setTotalPages(response.data.data.pagination.totalPages);

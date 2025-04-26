@@ -37,9 +37,9 @@ const ResumeManagement = () => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
-      // Extract job title from filename if not set
+    
       if (!jobTitle) {
-        const fileName = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+        const fileName = file.name.replace(/\.[^/.]+$/, ""); 
         setJobTitle(fileName);
       }
     }
