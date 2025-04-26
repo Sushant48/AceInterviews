@@ -15,6 +15,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json({limit: "16kb"}));
 app.use(express.urlencoded({limit:"16kb"}));
+app.use(express.static('public'));
 
 import userRoutes from "./routes/user.routes.js";
 import resumeRoutes from "./routes/resume.routes.js";
