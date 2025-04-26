@@ -3,7 +3,7 @@ import GlobalLayout from "../layouts/GlobalLayout";
 import PrivateRoute from "./PrivateRoute";
 
 import HomePage from "../pages/HomePage";
-import Dashboard from "../pages/DashBoard";
+import Dashboard from "../pages/Dashboard";
 import Resumes from "../pages/Resumes";
 import Interviews from "../pages/Interviews";
 import Login from "../pages/Auth/Login";
