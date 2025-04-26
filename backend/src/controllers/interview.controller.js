@@ -1,6 +1,7 @@
 import { Interview } from "../models/interview.model.js";
 import { Resume } from "../models/resume.model.js";
 import { generateInterviewQuestions } from "../utils/generateQuestions.js";
+import { generateFirstInterviewQuestion } from "../utils/generateFirstInterviewQuestion.js"
 import { generateInterviewFeedback } from "../utils/generateInterviewFeedback.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -80,19 +81,43 @@ const completeInterview = asyncHandler(async (req, res) => {
 
 
 const getInterviewHistory = asyncHandler(async (req, res) => {
-      const userId = req.user.id;
-      const {limit, status, date, sort, resumeId } = req.query;
+  const userId = req.user.id;
+  const { page = 1, limit = 5, status, date, sort, resumeId } = req.query;
   
-      const filter = { user: userId };
-      if (status) filter.status = status;
-      if (date) filter.createdAt = { $gte: new Date(date) };
-      if (resumeId) filter.resume = resumeId;
+  const pageNum = parseInt(page);
+  const limitNum = parseInt(limit);
+  const skip = (pageNum - 1) * limitNum;
   
-      const interviews = await Interview.find(filter)
-        .populate('resume', 'fileName')
-        .sort(sort === 'desc' ? '-createdAt' : 'createdAt').limit(limit);
+  const filter = { user: userId };
+  if (status) filter.status = status;
+  if (date) filter.createdAt = { $gte: new Date(date) };
+  if (resumeId) filter.resume = resumeId;
   
-      res.status(200).json(new ApiResponse(200, interviews, "Interview history retrieved successfully"));
+  const totalInterviews = await Interview.countDocuments(filter);
+  
+  const interviews = await Interview.find(filter)
+    .populate('resume', 'fileName')
+    .sort(sort === 'desc' ? '-createdAt' : 'createdAt')
+    .skip(skip)
+    .limit(limitNum);
+  
+  const totalPages = Math.ceil(totalInterviews / limitNum);
+  
+  res.status(200).json(new ApiResponse(
+    200, 
+    {
+      data: interviews,
+      pagination: {
+        total: totalInterviews,
+        currentPage: pageNum,
+        totalPages,
+        limit: limitNum,
+        hasNextPage: pageNum < totalPages,
+        hasPrevPage: pageNum > 1
+      }
+    }, 
+    "Interview history retrieved successfully"
+  ));
   });
 
 const getInterviewDetails = asyncHandler(async (req, res) => {
@@ -195,7 +220,7 @@ const deleteInterview = asyncHandler(async (req, res) => {
   });
 
 
-const startRealtimeInterview = asyncHandler(async (req, res) => {
+  const startRealtimeInterview = asyncHandler(async (req, res) => {
     const { resumeId, jobTitle } = req.body;
 
     if (!resumeId || !jobTitle) {
@@ -208,14 +233,20 @@ const startRealtimeInterview = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Resume not found");
     }
 
-    const interviewSession = {
-        userId: req.user._id,
-        resumeId,
-        jobTitle
-    };
+    const firstQuestion = await generateFirstInterviewQuestion(jobTitle, resume.resumeTxt);
 
-    res.status(200).json(new ApiResponse(200, interviewSession, "Real-time interview session initialized"));
+    const interview = await Interview.create({
+        user: req.user._id,
+        resume: resumeId,
+        jobTitle,
+        questions: [{ question: firstQuestion }],
+        status: "in-progress",
+        sessionType: "real-time",
+    });
+  
+    res.status(200).json(new ApiResponse(200, { interviewId: interview._id }, "Real-time interview session initialized"));
 });
+
 
 export {
   startInterview,

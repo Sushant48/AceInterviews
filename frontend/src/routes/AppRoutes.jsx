@@ -20,19 +20,23 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        
-        <Route path="/" element={<GlobalLayout />}>
-        
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
 
         <Route element={<PrivateRoute />}>
-          <Route index element={<HomePage />} />
-          <Route path="profile" element={<Profile />} />
           <Route path="mock-interview" element={<MockInterview />} />
+          <Route path="real-time-interview" element={<RealTimeInterview/>} />
+        </Route>
+             
+        <Route path="/" element={<GlobalLayout />}>
+        
+        <Route index element={<HomePage />} />
+        <Route path="home" element={<HomePage />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />  
+
+        <Route element={<PrivateRoute />}>         
+          <Route path="profile" element={<Profile />} />        
           <Route path="interview/:id" element={<InterviewDetails />} />
-          <Route path="profile-picture" element={<ProfilePicture />} />
-          <Route path="home" element={<HomePage />} />
+          <Route path="profile-picture" element={<ProfilePicture />} />      
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="change-password" element={<ChangePassword />} />
           <Route path="resumes" element={<Resumes />} />

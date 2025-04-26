@@ -16,6 +16,7 @@ const interviewSchema = new Schema(
       {
         question: { type: String, required: true },
         userAnswer: { type: String },
+        aiFeedback: String,
       },
     ],
     title: {

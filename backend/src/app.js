@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/errorHandler.middleware.js";
-
+import { createServer } from "http";
+import {setupInterviewSocket} from "./socket/index.js";
 
 const app = express();
 
@@ -15,7 +16,6 @@ app.use(cookieParser());
 app.use(express.json({limit: "16kb"}));
 app.use(express.urlencoded({limit:"16kb"}));
 app.use(express.static("public"));
-
 
 import userRoutes from "./routes/user.routes.js";
 import resumeRoutes from "./routes/resume.routes.js";
