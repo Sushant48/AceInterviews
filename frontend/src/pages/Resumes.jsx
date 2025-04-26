@@ -27,7 +27,7 @@ const ResumeManagement = () => {
     } catch (error) {
       const msg = error.response?.message || 'Error fetching resumes';
       setResumes([]);
-      toast.error(msg);
+      console.log(msg);     
     } finally {
       setIsLoading(false);
     }
