@@ -27,7 +27,7 @@ const Dashboard = () => {
 
     const fetchRecentInterviews = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/interview/history?limit=5&sort=-date`, {
+        const response = await axios.get(`${BASE_URL}/interview/history?limit=5&sort=desc`, {
           withCredentials: true,
         });
         setRecentInterviews(response.data.data.data);
