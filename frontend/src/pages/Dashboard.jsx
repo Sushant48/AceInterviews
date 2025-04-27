@@ -73,7 +73,6 @@ const Dashboard = () => {
         { withCredentials: true }
       );
 
-      console.log("handleRealTimeInterview ", response);
       const interviewId = response.data.data.interviewId;
 
       if (response.data.success) {

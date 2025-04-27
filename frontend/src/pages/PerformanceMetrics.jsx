@@ -19,6 +19,7 @@ const PerformanceMetrics = () => {
         });
         
         setMetrics(response.data.data);
+        
       } catch (error) {
         console.error('Failed to fetch performance metrics', error);
       } finally {
@@ -29,16 +30,12 @@ const PerformanceMetrics = () => {
     fetchPerformanceMetrics();
   }, []);
 
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  };
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 shadow-lg rounded-lg border border-[#E6E6E6]">
-          <p className="text-sm text-[#4B4B4B] mb-1">{formatDate(label)}</p>
+          <p className="text-sm text-[#4B4B4B] mb-1">{label}</p>
           <p className="text-[#491B6D] font-medium">
             Score: <span className="font-bold">{payload[0].value}%</span>
           </p>
@@ -205,17 +202,6 @@ const PerformanceMetrics = () => {
                 >
                   Score
                 </button>
-                <button 
-                  className={`px-3 py-1 text-sm rounded-full ${
-                    activeMetric === 'duration' 
-                      ? 'bg-[#491B6D] text-white' 
-                      : 'bg-gray-100 text-[#4B4B4B] hover:bg-gray-200'
-                  } transition-colors`}
-                  onClick={() => setActiveMetric('duration')}
-                  disabled={!metrics.performanceTrend?.[0]?.duration}
-                >
-                  Duration
-                </button>
               </div>
             </div>
 
@@ -225,13 +211,13 @@ const PerformanceMetrics = () => {
                   <LineChart 
                     data={metrics.performanceTrend.map(item => ({
                       ...item,
-                      date: formatDate(item.date)
+                      date: item.date
                     }))}
                     margin={{ top: 10, right: 30, left: 0, bottom: 30 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#E6E6E6" vertical={false} />
-                    <XAxis 
-                      dataKey="date" 
+                    <XAxis
+                      dataKey="date"
                       axisLine={false} 
                       tickLine={false}
                       tick={{ fill: '#4B4B4B', fontSize: 12 }}
